@@ -21,7 +21,7 @@ class RecetteController extends Controller
             'description' => 'Liste de toutes les recettes',
             'recettes' => $recettes
         ];
-        return view('recette.index', $data);
+        return view('recettes.index', $data);
     }
 
     /**
@@ -35,7 +35,7 @@ class RecetteController extends Controller
             'description' => 'Créer une nouvelle recette',
             'categories' => $categories
         ];
-        return view('recette.create', $data);
+        return view('recettes.create', $data);
     }
 
     /**
@@ -76,7 +76,7 @@ class RecetteController extends Controller
         $recette->save();
         
         $success = 'Recette créée avec succès.';
-        return redirect()->route('recette.store')->withSuccess($success);
+        return redirect()->route('recettes.store')->withSuccess($success);
     }
 
     /**

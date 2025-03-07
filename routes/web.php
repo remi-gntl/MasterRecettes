@@ -9,9 +9,7 @@ use App\Http\Controllers\{
 };
 
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [CategorieController::class, 'index'])->name('home');
 
 
 Route::resource('categories', CategorieController::class);

@@ -19,6 +19,12 @@ class CategorieController extends Controller
             'description'=>'Liste de toutes les catégories de recettes',
             'categories'=>$categories
         ];
+        
+        if (request()->is('/')) {
+            return view('welcome', $data); // Vue de la page d'accueil
+        }
+        
+        // Sinon, c'est l'index normal des catégories
         return view('categories.index', $data);
     }
 
@@ -66,7 +72,7 @@ class CategorieController extends Controller
             'categorie' => $categorie,
             'recettes' => $recettes
         ];
-        return view('categorie.show', $data);
+        return view('categories.show', $data);
     }
 
     /**
@@ -79,7 +85,7 @@ class CategorieController extends Controller
             'description' => 'Modifier la catégorie' . $categorie->nom,
             'categorie'=> $categorie
         ];
-        return view ('categorie.edit', $data);
+        return view ('categories.edit', $data);
     }
 
     /**
