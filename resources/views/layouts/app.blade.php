@@ -3,58 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $titre ?? 'Livre de Recettes' }}</title>
-    <meta name="description" content="{{ $description ?? 'Votre livre de recettes en ligne' }}">
-    
-    <!-- Tailwind CSS -->
+    <title>@yield('title', 'Répertoire de Recettes')</title>
     @vite('resources/css/app.css')
-    
-    <!-- Styles personnalisés -->
-    <style>
-        [x-cloak] { display: none !important; }
-    </style>
 </head>
-<body class="bg-gray-50 min-h-screen flex flex-col">
-    <!-- Navbar -->
-    @include('components.navbar')
-    
-    <!-- Messages de notification -->
-    @if(session('success'))
-        <div class="container mx-auto px-4 py-3">
-            @include('components.alert', [
-                'type' => 'success',
-                'message' => session('success')
-            ])
-        </div>
-    @endif
+<body class="bg-gray-100 min-h-screen">
+    <header class="bg-white shadow">
+        <nav class="container mx-auto px-4 py-4 flex items-center justify-between">
+            <a href="{{ route('home') }}" class="text-xl font-bold text-indigo-600">Master Recettes</a>
+            
+            <div class="space-x-4">
+                <a href="{{ route('home') }}" class="text-gray-700 hover:text-indigo-600">Accueil</a>
+                <div class="relative inline-block text-left group">
+                    <button class="text-gray-700 hover:text-indigo-600">
+                        Catégories
+                    </button>
+                    <div class="hidden group-hover:block absolute z-10 mt-2 w-48 rounded-md shadow-lg bg-white">
+                        <div class="py-1">
+                            @foreach(App\Models\Categorie::all() as $cat)
+                                <a href="{{ route('categories.show', $cat) }}" 
+                                   class="block px-4 py-2 text-gray-700 hover:bg-indigo-100">
+                                    {{ $cat->nom }}
+                                </a>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+                <a href="{{ route('recettes.index') }}" class="text-gray-700 hover:text-indigo-600">Toutes les recettes</a>
+                <a href="{{ route('recettes.create') }}" class="text-gray-700 hover:text-indigo-600">Ajouter une recette</a>
+            </div>
+        </nav>
+    </header>
 
-    @if(session('error'))
-        <div class="container mx-auto px-4 py-3">
-            @include('components.alert', [
-                'type' => 'error',
-                'message' => session('error')
-            ])
-        </div>
-    @endif
-    
-    <!-- Contenu principal -->
-    <main class="container mx-auto px-4 py-8 flex-grow">
-        @if(isset($titre) && !request()->is('/'))
-            <div class="mb-8">
-                <h1 class="text-3xl font-bold text-gray-800">{{ $titre }}</h1>
-                @if(isset($description))
-                    <p class="text-gray-600 mt-2">{{ $description }}</p>
-                @endif
+    <main class="container mx-auto px-4 py-8">
+        @if(session('success'))
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+                {{ session('success') }}
             </div>
         @endif
-        
+
+        @if(session('error'))
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                {{ session('error') }}
+            </div>
+        @endif
+
         @yield('content')
     </main>
-    
-    <!-- Footer -->
-    @include('components.footer')
-    
-    <!-- Scripts -->
-    @vite('resources/js/app.js')
+
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <p class="text-center">&copy; {{ date('Y') }} Master Recettes - By Rémi GENTIL</p>
+        </div>
+    </footer>
 </body>
 </html>

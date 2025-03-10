@@ -14,3 +14,5 @@ Route::get('/', [CategorieController::class, 'index'])->name('home');
 
 Route::resource('categories', CategorieController::class);
 Route::resource('recettes', RecetteController::class);
+
+

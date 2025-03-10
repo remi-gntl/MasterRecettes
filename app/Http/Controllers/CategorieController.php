@@ -8,114 +8,63 @@ use Illuminate\Support\Str;
 
 class CategorieController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $categories = Categorie::all();
-        $data = [
-            'titre'=> 'Vos recettes',
-            'description'=>'Liste de toutes les catégories de recettes',
-            'categories'=>$categories
-        ];
-        
-        if (request()->is('/')) {
-            return view('welcome', $data); // Vue de la page d'accueil
-        }
-        
-        // Sinon, c'est l'index normal des catégories
-        return view('categories.index', $data);
+        $categories = Categorie::with('recettes')->get();
+        return view('home', compact('categories'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        $data = [
-            'title' => 'Ajouter une catégorie',
-            'description' => 'Créer une nouvelle catégorie de recettes'
-        ];
-        return view('categories.create', $data);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'nom'=>'required|string|max:20',
-            'description'=>'nullable|string',
-        ]);
-
-        $categorie = new Categorie();
-        $categorie->nom = $request->nom;
-        $categorie->slug = Str::slug($request->nom);
-        $categorie->description = $request->description;
-        $categorie->save();
-
-        $success = 'Catégorie créée avec succès.';
-        return redirect()->route('categories.index')->withSuccess($success);
-    }
-
-    /**
-     * Display the specified resource.
-     */
     public function show(Categorie $categorie)
     {
-        $recettes = $categorie->recettes()->latest()->paginate(6);
-        $data = [
-            'titre' => $categorie->nom,
-            'description' => 'Recettes de la catégorie ' . $categorie->nom,
-            'categorie' => $categorie,
-            'recettes' => $recettes
-        ];
-        return view('categories.show', $data);
+        $recettes = $categorie->recettes()->paginate(12);
+        return view('categories.show', compact('categorie', 'recettes'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Categorie $categorie)
+    public function create()
     {
-        $data = [
-            'titre'=> 'Modifier la catégorie',
-            'description' => 'Modifier la catégorie' . $categorie->nom,
-            'categorie'=> $categorie
-        ];
-        return view ('categories.edit', $data);
+        return view('categories.create');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Categorie $categorie)
+    public function store(Request $request)
     {
-        $request->validate([
-            'nom' => 'required|string|max:255',
+        $validated = $request->validate([
+            'nom' => 'required|string|max:255|unique:categories',
             'description' => 'nullable|string',
         ]);
 
-        $categorie->nom = $request->nom;
-        $categorie->slug = Str::slug($request->nom);
-        $categorie->description = $request->description;
-        $categorie->save();
+        $validated['slug'] = Str::slug($validated['nom']);
 
-        $success = 'Catégorie mise à jour avec succès.';
-        return redirect()->route('categories.index')->withSuccess($success);
+        Categorie::create($validated);
 
+        return redirect()->route('categories.index')
+            ->with('success', 'Catégorie créée avec succès');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    public function edit(Categorie $categorie)
+    {
+        return view('categories.edit', compact('categorie'));
+    }
+
+    public function update(Request $request, Categorie $categorie)
+    {
+        $validated = $request->validate([
+            'nom' => 'required|string|max:255|unique:categories,nom,' . $categorie->id,
+            'description' => 'nullable|string',
+        ]);
+
+        $validated['slug'] = Str::slug($validated['nom']);
+
+        $categorie->update($validated);
+
+        return redirect()->route('categories.index')
+            ->with('success', 'Catégorie mise à jour avec succès');
+    }
+
     public function destroy(Categorie $categorie)
     {
         $categorie->delete();
 
-        $success = 'Catégorie supprimée avec succès.';
-        return redirect()->route('categories.index')->withSuccess($success);
+        return redirect()->route('categories.index')
+            ->with('success', 'Catégorie supprimée avec succès');
     }
 }
