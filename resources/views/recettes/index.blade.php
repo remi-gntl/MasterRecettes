@@ -3,11 +3,11 @@
 
 @section('content')
 <div class="container mx-auto px-4 py-8">
-    <h1 class="text-3xl font-bold mb-6">Liste des Recettes</h1>
+    <h1 class="text-3xl font-bold mb-6">Vos Recettes</h1>
 
     {{-- Bouton pour ajouter une nouvelle recette --}}
     <div class="mb-6">
-        <a href="{{ route('recettes.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+        <a href="{{ route('recettes.create') }}" class="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600">
             Ajouter une Recette
         </a>
     </div>
@@ -21,7 +21,7 @@
                     <img src="{{ asset('storage/' . $recette->image) }}" alt="{{ $recette->titre }}" class="w-full h-48 object-cover">
                 @else
                     <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
-                        <span class="text-gray-500">Pas d'image</span>
+                        <span class="text-gray-500">Image non disponible</span>
                     </div>
                 @endif
 
@@ -48,7 +48,7 @@
                     </p>
 
                     {{-- Bouton pour voir la recette --}}
-                    <a href="{{ route('recettes.show', $recette->id) }}" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                    <a href="{{ route('recettes.show', $recette->id) }}" class="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-green-600">
                         Voir la Recette
                     </a>
                 </div>

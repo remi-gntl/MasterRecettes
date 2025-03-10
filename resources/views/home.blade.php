@@ -4,12 +4,12 @@
 
 @section('content')
     <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-800 mb-4">Bienvenue sur Cuisine Facile</h1>
-        <p class="text-lg text-gray-600">Découvrez notre sélection de recettes délicieuses</p>
+        <h1 class="text-3xl font-bold text-gray-800 mb-4">Bienvenue sur Master Recettes</h1>
+        <p class="text-lg text-gray-600">Toutes les recettes de Mamie dans ton appli</p>
     </div>
 
     <div class="mb-12">
-        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Catégories de recettes</h2>
+        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Type de recettes</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             @foreach($categories as $categorie)
                 <a href="{{ route('categories.show', $categorie) }}" 
@@ -27,7 +27,7 @@
     </div>
 
     <div>
-        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Recettes récentes</h2>
+        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Vos dernières recettes</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach(App\Models\Recette::latest()->take(6)->get() as $recette)
                 <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300">
@@ -37,7 +37,7 @@
                              class="w-full h-48 object-cover">
                     @else
                         <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
-                            <span class="text-gray-400">Pas d'image</span>
+                            <span class="text-gray-400">Image non disponible</span>
                         </div>
                     @endif
                     <div class="p-4">
