@@ -5,7 +5,7 @@
              class="w-full h-48 object-cover">
     @else
         <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
-            <span class="text-gray-400">Pas d'image</span>
+            <span class="text-gray-400">Image non disponible</span>
         </div>
     @endif
     <div class="p-4">

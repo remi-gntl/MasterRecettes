@@ -1,0 +1,139 @@
+@extends('layouts.app')
+
+@section('title', 'Modifier la recette')
+
+@section('content')
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">Modifier la recette</h1>
+        
+        <form action="{{ route('recettes.update', $recette) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+            
+            <div class="mb-4">
+                <label for="titre" class="block text-gray-700 font-medium mb-2">Titre</label>
+                <input type="text" name="titre" id="titre" 
+                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                       value="{{ old('titre', $recette->titre) }}" required>
+                @error('titre')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+            
+            <div class="mb-4">
+                <label for="description" class="block text-gray-700 font-medium mb-2">Description</label>
+                <textarea name="description" id="description" rows="3"
+                          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">{{ old('description', $recette->description) }}</textarea>
+                @error('description')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label for="temps_preparation" class="block text-gray-700 font-medium mb-2">Temps de préparation (min)</label>
+                    <input type="number" name="temps_preparation" id="temps_preparation" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                           value="{{ old('temps_preparation', $recette->temps_preparation) }}" min="0">
+                    @error('temps_preparation')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div>
+                    <label for="temps_cuisson" class="block text-gray-700 font-medium mb-2">Temps de cuisson (min)</label>
+                    <input type="number" name="temps_cuisson" id="temps_cuisson" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                           value="{{ old('temps_cuisson', $recette->temps_cuisson) }}" min="0">
+                    @error('temps_cuisson')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label for="portions" class="block text-gray-700 font-medium mb-2">Nombre de portions</label>
+                    <input type="number" name="portions" id="portions" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                           value="{{ old('portions', $recette->portions) }}" min="1">
+                    @error('portions')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div>
+                    <label for="difficulte" class="block text-gray-700 font-medium mb-2">Difficulté</label>
+                    <select name="difficulte" id="difficulte" 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="">Sélectionner</option>
+                        <option value="Facile" {{ old('difficulte', $recette->difficulte) == 'Facile' ? 'selected' : '' }}>Facile</option>
+                        <option value="Moyen" {{ old('difficulte', $recette->difficulte) == 'Moyen' ? 'selected' : '' }}>Moyen</option>
+                        <option value="Difficile" {{ old('difficulte', $recette->difficulte) == 'Difficile' ? 'selected' : '' }}>Difficile</option>
+                    </select>
+                    @error('difficulte')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <label for="categorie_id" class="block text-gray-700 font-medium mb-2">Catégorie</label>
+                <select name="categorie_id" id="categorie_id" 
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                    <option value="">Sélectionner une catégorie</option>
+                    @foreach(App\Models\Categorie::all() as $categorie)
+                        <option value="{{ $categorie->id }}" {{ old('categorie_id', $recette->categorie_id) == $categorie->id ? 'selected' : '' }}>
+                            {{ $categorie->nom }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('categorie_id')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+            
+            <div class="mb-4">
+                <label for="ingredients" class="block text-gray-700 font-medium mb-2">Ingrédients (un par ligne)</label>
+                <textarea name="ingredients" id="ingredients" rows="6"
+                          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required>{{ old('ingredients', $recette->ingredients) }}</textarea>
+                @error('ingredients')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+            
+            <div class="mb-4">
+                <label for="instructions" class="block text-gray-700 font-medium mb-2">Instructions</label>
+                <textarea name="instructions" id="instructions" rows="8"
+                          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500" required>{{ old('instructions', $recette->instructions) }}</textarea>
+                @error('instructions')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+            
+            <div class="mb-6">
+                <label for="image" class="block text-gray-700 font-medium mb-2">Image</label>
+                @if($recette->image)
+                    <div class="mb-2">
+                        <img src="{{ asset('storage/' . $recette->image) }}" alt="{{ $recette->titre }}" class="w-32 h-32 object-cover rounded">
+                    </div>
+                @endif
+                <input type="file" name="image" id="image" 
+                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                       accept="image/*">
+                <p class="text-sm text-gray-500 mt-1">Laissez vide pour conserver l'image actuelle</p>
+                @error('image')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+            
+            <div class="flex justify-end">
+                <a href="{{ route('recettes.show', $recette) }}" 
+                   class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 mr-2">
+                    Annuler
+                </a>
+                <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
+                    Mettre à jour
+                </button>
+            </div>
+        </form>
+    </div>
+@endsection
