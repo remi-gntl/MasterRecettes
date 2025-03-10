@@ -3,97 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $titre ?? 'Bibliothèque de Recettes' }}</title>
-    <meta name="description" content="{{ $description ?? 'Découvrez nos délicieuses recettes de cuisine' }}">
-    
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- Font Awesome pour les icônes -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <title>Recettes Gourmandes</title>
     <style>
-        .card-img-top {
-            height: 200px;
-            object-fit: cover;
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #fffaf0;
+            color: #333;
+            margin: 0;
+            padding: 0;
         }
-        .category-card {
-            transition: transform 0.3s;
+        header {
+            background-color: #ff7043;
+            padding: 15px 0;
+            text-align: center;
+            color: white;
+            font-size: 1.5em;
+            font-weight: bold;
         }
-        .category-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        nav {
+            display: flex;
+            justify-content: center;
+            background: #ff5722;
+            padding: 10px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.2em;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         .recipe-card {
+            display: flex;
+            background: #ffe0b2;
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s;
         }
         .recipe-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transform: scale(1.02);
         }
-        .navbar-brand {
-            font-weight: bold;
+        .recipe-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 8px;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+        .recipe-content {
+            flex-grow: 1;
+        }
+        .recipe-title {
+            font-size: 1.5em;
+            margin: 0 0 5px;
+            color: #d84315;
+        }
+        .recipe-description {
+            font-size: 1em;
+            color: #555;
         }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
-        <div class="container">
-            <a class="navbar-brand" href="{{ url('/') }}">
-                <i class="fas fa-utensils me-2"></i>Recettes Gourmandes
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->is('/') ? 'active' : '' }}" href="{{ url('/') }}">Accueil</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->is('recettes*') ? 'active' : '' }}" href="{{ route('recettes.index') }}">Recettes</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->is('categories*') ? 'active' : '' }}" href="{{ route('categories.index') }}">Catégories</a>
-                    </li>
-                </ul>
-                <div class="d-flex">
-                    <a href="{{ route('recettes.create') }}" class="btn btn-success">
-                        <i class="fas fa-plus me-1"></i>Ajouter une recette
-                    </a>
-                </div>
-            </div>
-        </div>
+    <header>Recettes Gourmandes</header>
+    <nav>
+        <a href="#">Accueil</a>
+        <a href="#">Recettes</a>
+        <a href="#">À propos</a>
+        <a href="#">Contact</a>
     </nav>
-
-    <!-- Contenu principal -->
-    <main class="container">
-        @if(session()->has('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-
-        @yield('content')
-    </main>
-
-    <!-- Footer -->
-    <footer class="container mt-5 py-4 border-top">
-        <div class="row">
-            <div class="col-md-6">
-                <p>&copy; {{ date('Y') }} Bibliothèque de Recettes</p>
-            </div>
-            <div class="col-md-6 text-md-end">
-                <a href="{{ url('/') }}" class="text-decoration-none">Accueil</a> |
-                <a href="{{ route('recettes.index') }}" class="text-decoration-none">Recettes</a> |
-                <a href="{{ route('categories.index') }}" class="text-decoration-none">Catégories</a>
+    <div class="container">
+        <div class="recipe-card">
+            <img src="https://source.unsplash.com/150x150/?food" alt="Recette" class="recipe-image">
+            <div class="recipe-content">
+                <div class="recipe-title">Tarte aux pommes</div>
+                <div class="recipe-description">Une délicieuse tarte aux pommes avec une pâte croustillante et un goût sucré irrésistible.</div>
             </div>
         </div>
-    </footer>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <div class="recipe-card">
+            <img src="https://source.unsplash.com/150x150/?pasta" alt="Recette" class="recipe-image">
+            <div class="recipe-content">
+                <div class="recipe-title">Pâtes à la Carbonara</div>
+                <div class="recipe-description">Des pâtes crémeuses avec du lard croustillant et du parmesan pour une explosion de saveurs.</div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

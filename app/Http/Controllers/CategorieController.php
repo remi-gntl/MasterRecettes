@@ -15,7 +15,7 @@ class CategorieController extends Controller
     {
         $categories = Categorie::all();
         $data = [
-            'titre'=> 'Catégories de recettes',
+            'titre'=> 'Vos recettes',
             'description'=>'Liste de toutes les catégories de recettes',
             'categories'=>$categories
         ];
