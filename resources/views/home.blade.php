@@ -11,18 +11,37 @@
     <div class="mb-12">
         <h2 class="text-2xl font-semibold text-gray-800 mb-6">Type de recettes</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            @foreach($categories as $categorie)
-                <a href="{{ route('categories.show', $categorie) }}" 
-                   class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-300">
-                    <div class="bg-indigo-100 h-32 flex items-center justify-center">
-                        <span class="text-2xl font-bold text-indigo-600">{{ $categorie->nom }}</span>
-                    </div>
-                    <div class="p-4">
-                        <p class="text-gray-600">{{ Str::limit($categorie->description, 100) }}</p>
-                        <p class="mt-2 text-sm text-indigo-600">{{ $categorie->recettes->count() }} recettes</p>
-                    </div>
-                </a>
-            @endforeach
+          @foreach($categories as $categorie)
+          <div class="relative rounded-lg shadow-md overflow-hidden group">
+              <div class="h-40 overflow-hidden">
+                  @if($categorie->image)
+                      <img src="{{ asset('storage/' . $categorie->image) }}" 
+                           alt="{{ $categorie->nom }}" 
+                           class="w-full h-full object-cover">
+                  @else
+                      <div class="bg-indigo-100 h-full w-full flex items-center justify-center">
+                          <span class="text-2xl font-bold text-indigo-600">{{ $categorie->nom }}</span>
+                      </div>
+                  @endif
+              </div>
+              
+              <div class="bg-white p-3 border-t">
+                  <h3 class="text-lg font-bold text-indigo-600 text-center">{{ $categorie->nom }}</h3>
+              </div>
+              
+              <!-- Overlay qui apparaît au survol -->
+              <div class="absolute inset-0 bg-white bg-opacity-90 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-center p-4">
+                  <h3 class="text-xl font-bold text-indigo-600 mb-2">{{ $categorie->nom }}</h3>
+                  <p class="text-gray-600 mb-2">{{ $categorie->description }}</p>
+                  <div class="mt-1">
+                      <a href="{{ route('categories.show', $categorie) }}" 
+                         class="px-3 py-1 text-xs bg-blue-500 text-white rounded-full">
+                          {{ $categorie->recettes->count() }} recettes
+                      </a>
+                  </div>
+              </div>
+          </div>
+      @endforeach
         </div>
     </div>
 
