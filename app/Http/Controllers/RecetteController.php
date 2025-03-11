@@ -29,13 +29,34 @@ class RecetteController extends Controller
             'description' => 'nullable|string',
             'ingredients' => 'required|string',
             'instructions' => 'required|string',
-            'temps_preparation' => 'nullable|integer|min:0',
-            'temps_cuisson' => 'nullable|integer|min:0',
+            'temps_preparation_heures' => 'nullable|integer|min:0',
+            'temps_preparation_minutes' => 'nullable|integer|min:0|max:59',
+            'temps_cuisson_heures' => 'nullable|integer|min:0',
+            'temps_cuisson_minutes' => 'nullable|integer|min:0|max:59',
             'portions' => 'nullable|integer|min:1',
             'difficulte' => 'nullable|string|in:Facile,Moyen,Difficile',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'categorie_id' => 'required|exists:categories,id',
         ]);
+
+        $temps_preparation = 0;
+        if ($request->filled('temps_preparation_heures')) {
+            $temps_preparation += $request->temps_preparation_heures * 60;
+        }
+        if ($request->filled('temps_preparation_minutes')) {
+            $temps_preparation += $request->temps_preparation_minutes;
+        }
+        $validated['temps_preparation'] = $temps_preparation > 0 ? $temps_preparation : null;
+
+        $temps_cuisson = 0;
+        if ($request->filled('temps_cuisson_heures')) {
+            $temps_cuisson += $request->temps_cuisson_heures * 60;
+        }
+        if ($request->filled('temps_cuisson_minutes')) {
+            $temps_cuisson += $request->temps_cuisson_minutes;
+        }
+        $validated['temps_cuisson'] = $temps_cuisson > 0 ? $temps_cuisson : null;
+
 
         $validated['slug'] = Str::slug($validated['titre']);
 
@@ -69,13 +90,35 @@ class RecetteController extends Controller
             'description' => 'nullable|string',
             'ingredients' => 'required|string',
             'instructions' => 'required|string',
-            'temps_preparation' => 'nullable|integer|min:0',
-            'temps_cuisson' => 'nullable|integer|min:0',
+            'temps_preparation_heures' => 'nullable|integer|min:0',
+            'temps_preparation_minutes' => 'nullable|integer|min:0|max:59',
+            'temps_cuisson_heures' => 'nullable|integer|min:0',
+            'temps_cuisson_minutes' => 'nullable|integer|min:0|max:59',
             'portions' => 'nullable|integer|min:1',
             'difficulte' => 'nullable|string|in:Facile,Moyen,Difficile',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'categorie_id' => 'required|exists:categories,id',
         ]);
+
+        $temps_preparation = 0;
+        if ($request->filled('temps_preparation_heures')) {
+            $temps_preparation += $request->temps_preparation_heures * 60;
+        }
+        if ($request->filled('temps_preparation_minutes')) {
+            $temps_preparation += $request->temps_preparation_minutes;
+        }
+        $validated['temps_preparation'] = $temps_preparation > 0 ? $temps_preparation : null;
+
+        $temps_cuisson = 0;
+        if ($request->filled('temps_cuisson_heures')) {
+            $temps_cuisson += $request->temps_cuisson_heures * 60;
+        }
+        if ($request->filled('temps_cuisson_minutes')) {
+            $temps_cuisson += $request->temps_cuisson_minutes;
+        }
+        $validated['temps_cuisson'] = $temps_cuisson > 0 ? $temps_cuisson : null;
+
+
 
         $validated['slug'] = Str::slug($validated['titre']);
 
@@ -85,7 +128,7 @@ class RecetteController extends Controller
             if ($recette->image) {
                 Storage::disk('public')->delete($recette->image);
             }
-            
+
             $imagePath = $request->file('image')->store('recettes', 'public');
             $validated['image'] = $imagePath;
         }
@@ -102,7 +145,7 @@ class RecetteController extends Controller
         if ($recette->image) {
             Storage::disk('public')->delete($recette->image);
         }
-        
+
         $recette->delete();
 
         return redirect()->route('recettes.index')

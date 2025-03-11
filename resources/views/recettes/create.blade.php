@@ -30,20 +30,48 @@
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
-                    <label for="temps_preparation" class="block text-gray-700 font-medium mb-2">Temps de préparation (min)</label>
-                    <input type="number" name="temps_preparation" id="temps_preparation" 
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                           value="{{ old('temps_preparation') }}" min="0">
-                    @error('temps_preparation')
+                    <label class="block text-gray-700 font-medium mb-2">Temps de préparation</label>
+                    <div class="flex space-x-2">
+                        <div class="w-1/2">
+                            <input type="number" name="temps_preparation_heures" id="temps_preparation_heures" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                   value="{{ old('temps_preparation_heures', $recette->temps_preparation_heures ?? 0) }}" min="0" placeholder="Heures">
+                            <label for="temps_preparation_heures" class="text-sm text-gray-500">Heures</label>
+                        </div>
+                        <div class="w-1/2">
+                            <input type="number" name="temps_preparation_minutes" id="temps_preparation_minutes" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                   value="{{ old('temps_preparation_minutes', $recette->temps_preparation_minutes ?? 0) }}" min="0" max="59" placeholder="Minutes">
+                            <label for="temps_preparation_minutes" class="text-sm text-gray-500">Minutes</label>
+                        </div>
+                    </div>
+                    @error('temps_preparation_heures')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                    @error('temps_preparation_minutes')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
                 <div>
-                    <label for="temps_cuisson" class="block text-gray-700 font-medium mb-2">Temps de cuisson (min)</label>
-                    <input type="number" name="temps_cuisson" id="temps_cuisson" 
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                           value="{{ old('temps_cuisson') }}" min="0">
-                    @error('temps_cuisson')
+                    <label class="block text-gray-700 font-medium mb-2">Temps de cuisson</label>
+                    <div class="flex space-x-2">
+                        <div class="w-1/2">
+                            <input type="number" name="temps_cuisson_heures" id="temps_cuisson_heures" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                   value="{{ old('temps_cuisson_heures', $recette->temps_cuisson_heures ?? 0) }}" min="0" placeholder="Heures">
+                            <label for="temps_cuisson_heures" class="text-sm text-gray-500">Heures</label>
+                        </div>
+                        <div class="w-1/2">
+                            <input type="number" name="temps_cuisson_minutes" id="temps_cuisson_minutes" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                   value="{{ old('temps_cuisson_minutes', $recette->temps_cuisson_minutes ?? 0) }}" min="0" max="59" placeholder="Minutes">
+                            <label for="temps_cuisson_minutes" class="text-sm text-gray-500">Minutes</label>
+                        </div>
+                    </div>
+                    @error('temps_cuisson_heures')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                    @error('temps_cuisson_minutes')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>

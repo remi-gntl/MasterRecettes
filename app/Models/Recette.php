@@ -27,4 +27,24 @@ class Recette extends Model
     {
         return $this->belongsTo(Categorie::class);
     }
+
+    public function getTempsPreparationHeuresAttribute()
+    {
+        return floor($this->temps_preparation / 60);
+    }
+
+    public function getTempsPreparationMinutesAttribute()
+    {
+        return $this->temps_preparation % 60;
+    }
+
+    public function getTempsCuissonHeuresAttribute()
+    {
+        return floor($this->temps_cuisson / 60);
+    }
+
+    public function getTempsCuissonMinutesAttribute()
+    {
+        return $this->temps_cuisson % 60;
+    }
 }

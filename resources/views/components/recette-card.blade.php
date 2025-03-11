@@ -27,13 +27,31 @@
                     @if($recette->temps_preparation)
                         <span class="flex items-center">
                             <i class="fa-solid fa-clock mr-1"></i>
-                            Préparation: {{ $recette->temps_preparation }} min
+                            Préparation: 
+                            @php
+                                $heures = floor($recette->temps_preparation / 60);
+                                $minutes = $recette->temps_preparation % 60;
+                            @endphp
+                            @if($heures > 0)
+                                {{ $heures }}h{{ $minutes > 0 ? ' ' . $minutes . 'min' : '' }}
+                            @else
+                                {{ $minutes }}min
+                            @endif
                         </span>
                     @endif
                     @if($recette->temps_cuisson)
                         <span class="flex items-center">
                             <i class="fa-solid fa-fire mr-1"></i>
-                            Cuisson: {{ $recette->temps_cuisson }} min
+                            Cuisson: 
+                            @php
+                                $heures = floor($recette->temps_cuisson / 60);
+                                $minutes = $recette->temps_cuisson % 60;
+                            @endphp
+                            @if($heures > 0)
+                                {{ $heures }}h{{ $minutes > 0 ? ' ' . $minutes . 'min' : '' }}
+                            @else
+                                {{ $minutes }}min
+                            @endif
                         </span>
                     @endif
                 </div>
