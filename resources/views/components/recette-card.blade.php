@@ -1,22 +1,48 @@
-<a href="{{ route('recettes.show', $recette->slug) }}" class="block hover:shadow-lg transition duration-300">
-    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+<a href="{{ route('recettes.show', $recette->slug) }}" class="block bg-white rounded-lg shadow-md overflow-hidden shadow-hover group">
+    <div class="relative overflow-hidden">
         @if($recette->image)
-            <img src="{{ asset('storage/' . $recette->image) }}" alt="{{ $recette->titre }}" class="w-full h-48 object-cover">
+            <img src="{{ asset('storage/' . $recette->image) }}" 
+                 alt="{{ $recette->titre }}" 
+                 class="w-full h-48 object-cover zoom-image">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         @else
             <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
-                Image non disponible
+                <span class="text-gray-400">Image non disponible</span>
             </div>
         @endif
+        <div class="absolute bottom-0 left-0 right-0 p-3 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
+            <span class="bg-indigo-600 text-white text-xs font-medium px-2 py-1 rounded">{{ $recette->categorie->nom }}</span>
+            @if($recette->difficulte)
+                <span class="bg-gray-700 text-white text-xs font-medium px-2 py-1 rounded ml-1">{{ $recette->difficulte }}</span>
+            @endif
+        </div>
+    </div>
+    <div class="p-4">
+        <h3 class="text-xl font-semibold mb-2">{{ $recette->titre }}</h3>
+        <p class="text-gray-600 mb-2">{{ Str::limit($recette->description, 80) }}</p>
         
-        <div class="p-4">
-            <h3 class="text-lg font-semibold">{{ $recette->titre }}</h3>
-            
-            <p class="text-gray-600 mt-2">{{ Str::limit($recette->description, 100) }}</p>
-            
-            <div class="mt-4 flex justify-between items-center">
-                <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded">{{ $recette->categorie->nom }}</span>
-                <span class="text-blue-600 hover:text-blue-800">Voir la recette</span>
-            </div>
+        <div class="card-hover-info">
+            @if($recette->temps_preparation || $recette->temps_cuisson)
+                <div class="flex flex-wrap gap-2 text-sm text-gray-500">
+                    @if($recette->temps_preparation)
+                        <span class="flex items-center">
+                            <i class="fa-solid fa-clock mr-1"></i>
+                            Préparation: {{ $recette->temps_preparation }} min
+                        </span>
+                    @endif
+                    @if($recette->temps_cuisson)
+                        <span class="flex items-center">
+                            <i class="fa-solid fa-fire mr-1"></i>
+                            Cuisson: {{ $recette->temps_cuisson }} min
+                        </span>
+                    @endif
+                </div>
+            @endif
+        </div>
+        
+        <div class="mt-3 flex justify-between items-center">
+            <span class="text-sm text-indigo-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Voir la recette</span>
+            <span class="text-indigo-600 arrow-icon">→</span>
         </div>
     </div>
 </a>
