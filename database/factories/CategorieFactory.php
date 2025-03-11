@@ -5,16 +5,15 @@ namespace Database\Factories;
 use App\Models\Categorie;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Categorie>
- */
+
 class CategorieFactory extends Factory
 {
     protected $model = Categorie::class;
 
     public function definition(): array
     {
-        $nom = $this->faker->unique()->randomElement(['Entrées', 'Plats', 'Desserts', 'Boissons', 'Soupes', 'Salades']);
+        // Retournez uniquement les catégories que vous voulez avoir
+        $nom = $this->faker->unique()->randomElement(['Entrées', 'Plats', 'Desserts', 'Extras']);
         
         return [
             'nom' => $nom,

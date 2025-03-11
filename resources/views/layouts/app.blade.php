@@ -17,7 +17,7 @@
                     <button class="text-gray-700 hover:text-indigo-600">
                         Catégories
                     </button>
-                    <div class="hidden group-hover:block absolute z-10 mt-2 w-48 rounded-md shadow-lg bg-white">
+                    <div class="hidden group-hover:block absolute z-10 mt-0 w-48 rounded-md shadow-lg bg-white">
                         <div class="py-1">
                             @foreach(App\Models\Categorie::all() as $cat)
                                 <a href="{{ route('categories.show', $cat) }}" 

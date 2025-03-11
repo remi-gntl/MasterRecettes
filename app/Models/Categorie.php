@@ -9,11 +9,7 @@ class Categorie extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'nom',
-        'slug',
-        'description',
-    ];
+    protected $guarded = ['*'];
 
     public function recettes()
     {

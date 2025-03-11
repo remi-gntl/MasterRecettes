@@ -22,49 +22,26 @@ class CategorieController extends Controller
 
     public function create()
     {
-        return view('categories.create');
+        return back()->withError('Les catégories ne peuvent pas être modifiées');
     }
-
+    
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'nom' => 'required|string|max:255|unique:categories',
-            'description' => 'nullable|string',
-        ]);
-
-        $validated['slug'] = Str::slug($validated['nom']);
-
-        Categorie::create($validated);
-
-        return redirect()->route('categories.index')
-            ->with('success', 'Catégorie créée avec succès');
+        return back()->withError('Les catégories ne peuvent pas être créées');
     }
-
+    
     public function edit(Categorie $categorie)
     {
-        return view('categories.edit', compact('categorie'));
+        return back()->withError('Les catégories ne peuvent pas être modifiées');
     }
-
+    
     public function update(Request $request, Categorie $categorie)
     {
-        $validated = $request->validate([
-            'nom' => 'required|string|max:255|unique:categories,nom,' . $categorie->id,
-            'description' => 'nullable|string',
-        ]);
-
-        $validated['slug'] = Str::slug($validated['nom']);
-
-        $categorie->update($validated);
-
-        return redirect()->route('categories.index')
-            ->with('success', 'Catégorie mise à jour avec succès');
+        return back()->withError('Les catégories ne peuvent pas être modifiées');
     }
-
+    
     public function destroy(Categorie $categorie)
     {
-        $categorie->delete();
-
-        return redirect()->route('categories.index')
-            ->with('success', 'Catégorie supprimée avec succès');
+        return back()->withError('Les catégories ne peuvent pas être supprimées');
     }
 }

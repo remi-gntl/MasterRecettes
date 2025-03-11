@@ -7,7 +7,7 @@
 
     {{-- Bouton pour ajouter une nouvelle recette --}}
     <div class="mb-6">
-        <a href="{{ route('recettes.create') }}" class="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600">
+        <a href="{{ route('recettes.create') }}" class="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-blue-600">
             Ajouter une Recette
         </a>
     </div>
@@ -27,7 +27,7 @@
 
                 {{-- Contenu de la carte --}}
                 <div class="p-4">
-                    <h2 class="text-xl font-semibold mb-2">{{ $recette->titre }}</h2>
+                    <a href="{{ route('recettes.show', $recette->id) }}" class="text-xl font-semibold mb-2">{{ $recette->titre }}</a>
                     <p class="text-gray-600 mb-4">{{ Str::limit($recette->description, 100) }}</p>
 
                     {{-- Catégorie --}}

@@ -12,7 +12,9 @@ use App\Http\Controllers\{
 Route::get('/', [CategorieController::class, 'index'])->name('home');
 
 
-Route::resource('categories', CategorieController::class);
+Route::get('categories', [CategorieController::class, 'index'])->name('index');
+Route::get('/categories/{categorie}', [CategorieController::class, 'show'])->name('categories.show');
+
 Route::resource('recettes', RecetteController::class);
 
 
