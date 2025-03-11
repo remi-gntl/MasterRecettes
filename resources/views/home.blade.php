@@ -45,7 +45,7 @@
                         <p class="text-gray-600 mb-2">{{ Str::limit($recette->description, 100) }}</p>
                         <div class="flex justify-between items-center">
                             <span class="text-sm text-indigo-600">{{ $recette->categorie->nom }}</span>
-                            <a href="{{ route('recettes.show', $recette) }}" 
+                            <a href="{{ route('recettes.show', $recette->slug) }}" 
                                class="text-indigo-600 hover:text-indigo-800">Voir la recette</a>
                         </div>
                     </div>

@@ -27,7 +27,7 @@
 
                 {{-- Contenu de la carte --}}
                 <div class="p-4">
-                    <a href="{{ route('recettes.show', $recette->id) }}" class="text-xl font-semibold mb-2">{{ $recette->titre }}</a>
+                    <h2 class="text-xl font-semibold mb-2">{{ $recette->titre }}</h2>
                     <p class="text-gray-600 mb-4">{{ Str::limit($recette->description, 100) }}</p>
 
                     {{-- Catégorie --}}
@@ -48,7 +48,7 @@
                     </p>
 
                     {{-- Bouton pour voir la recette --}}
-                    <a href="{{ route('recettes.show', $recette->id) }}" class="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                    <a href="{{ route('recettes.show', $recette->slug) }}" class="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-green-600">
                         Voir la Recette
                     </a>
                 </div>
