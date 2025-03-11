@@ -8,7 +8,7 @@
     @vite('resources/css/app.css')
 </head>
 <body class="bg-gray-100 min-h-screen">
-    <header class="bg-white shadow sticky top-0">
+    <header class="bg-white shadow sticky top-0 z-50">
         <nav class="container mx-auto px-4 py-4 flex items-center justify-between">
             <a href="{{ route('home') }}" class="text-xl font-bold text-indigo-600">Master Recettes</a>
             
