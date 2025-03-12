@@ -7,12 +7,26 @@ use App\Models\Categorie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class RecetteController extends Controller
 {
+    // Méthode pour vérifier si l'utilisateur est autorisé à modifier/supprimer une recette
+    private function authorize(Recette $recette)
+    {
+        // Si l'utilisateur est admin, il peut tout faire
+        if (Auth::user()->isAdmin()) {
+            return true;
+        }
+        
+        // Si la recette n'a pas d'utilisateur associé (anciennes recettes)
+        // ou si l'utilisateur connecté est le propriétaire
+        return !$recette->user_id || $recette->user_id === Auth::id();
+    }
+
     public function index()
     {
-        $recettes = Recette::with('categorie')->latest()->paginate(12);
+        $recettes = Recette::with(['categorie', 'user'])->latest()->paginate(12);
         return view('recettes.index', compact('recettes'));
     }
 
@@ -22,27 +36,7 @@ class RecetteController extends Controller
         return view('recettes.create', compact('categories'));
     }
 
-    // //fonction de recherche (searchbar dans navbar) (recherche traditionnelle qui recharge toute la page)
-    // public function search(Request $request)
-    // {
-    //     $query = $request->input('search');
-
-    //     // Si la recherche est vide, redirigez vers la liste des recettes
-    //     if (empty($query)) {
-    //         return back();
-    //     }
-
-    //     $recettes = Recette::where('titre', 'ILIKE', "%{$query}%")
-    //         ->orWhere('description', 'ILIKE', "%{$query}%")
-    //         ->with('categorie')
-    //         ->paginate(12);
-
-    //     return view('recettes.index', compact('recettes', 'search'));
-    // }
-//a mettre si on fait une recherche qui redirige sur une page et pas dynamique
-
-
-    //Une recherche AJAX qui renvoie seulement des données JSON
+    // Recherche AJAX
     public function apiSearch(Request $request)
     {
         $query = $request->input('query');
@@ -53,7 +47,7 @@ class RecetteController extends Controller
 
         $recettes = Recette::where('titre', 'ILIKE', "%{$query}%")
             ->orWhere('description', 'ILIKE', "%{$query}%")
-            ->with('categorie')
+            ->with(['categorie', 'user'])
             ->limit(6)
             ->get();
 
@@ -97,6 +91,9 @@ class RecetteController extends Controller
 
 
         $validated['slug'] = Str::slug($validated['titre']);
+        
+        // Associer l'utilisateur connecté
+        $validated['user_id'] = Auth::id();
 
         // Gestion de l'image
         if ($request->hasFile('image')) {
@@ -117,12 +114,24 @@ class RecetteController extends Controller
 
     public function edit(Recette $recette)
     {
+        // Vérifier si l'utilisateur est autorisé
+        if (!$this->authorize($recette)) {
+            return redirect()->route('recettes.show', $recette)
+                ->with('error', 'Vous n\'êtes pas autorisé à modifier cette recette.');
+        }
+        
         $categories = Categorie::all();
         return view('recettes.edit', compact('recette', 'categories'));
     }
 
     public function update(Request $request, Recette $recette)
     {
+        // Vérifier si l'utilisateur est autorisé
+        if (!$this->authorize($recette)) {
+            return redirect()->route('recettes.show', $recette)
+                ->with('error', 'Vous n\'êtes pas autorisé à modifier cette recette.');
+        }
+        
         $validated = $request->validate([
             'titre' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -156,8 +165,6 @@ class RecetteController extends Controller
         }
         $validated['temps_cuisson'] = $temps_cuisson > 0 ? $temps_cuisson : null;
 
-
-
         $validated['slug'] = Str::slug($validated['titre']);
 
         // Gestion de l'image
@@ -179,13 +186,19 @@ class RecetteController extends Controller
 
     public function destroy(Recette $recette)
     {
-        // Supprimer l'image associée si elle existe
+        // Vérifier si l'utilisateur est autorisé
+        if (!$this->authorize($recette)) {
+            return redirect()->route('recettes.show', $recette)
+                ->with('error', 'Vous n\'êtes pas autorisé à supprimer cette recette.');
+        }
+
+        // Supprimer l'image si elle existe
         if ($recette->image) {
             Storage::disk('public')->delete($recette->image);
         }
 
         $recette->delete();
-
+        
         return redirect()->route('recettes.index')
             ->with('success', 'Recette supprimée avec succès');
     }

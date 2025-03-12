@@ -11,7 +11,7 @@
     <header class="bg-white shadow sticky top-0 z-50">
         <nav class="container mx-auto px-4 py-4 flex items-center justify-between">
             <a href="{{ route('home') }}" class="text-xl font-bold text-indigo-600">Master Recettes</a>
-
+        
             <div class="space-x-4">
                 <div class="relative inline-block">
                     <div class="relative">
@@ -21,7 +21,7 @@
                     </div>
                     <div id="search-results" class="absolute z-10 mt-1 w-64 bg-white shadow-lg rounded-md hidden"></div>
                 </div>
-
+        
                 <a href="{{ route('home') }}" class="text-gray-700 hover:text-indigo-600">Accueil</a>
                 <div class="relative inline-block text-left group">
                     <button class="text-gray-700 hover:text-indigo-600">
@@ -39,7 +39,34 @@
                     </div>
                 </div>
                 <a href="{{ route('recettes.index') }}" class="text-gray-700 hover:text-indigo-600">Toutes les recettes</a>
-                <a href="{{ route('recettes.create') }}" class="text-gray-700 hover:text-indigo-600">Ajouter une recette</a>
+                
+                @guest
+                    <a href="{{ route('login') }}" class="text-gray-700 hover:text-indigo-600">Connexion</a>
+                    <a href="{{ route('register') }}" class="text-gray-700 hover:text-indigo-600">Inscription</a>
+                @else
+                    <a href="{{ route('recettes.create') }}" class="text-gray-700 hover:text-indigo-600">Ajouter une recette</a>
+                    
+                    <div class="relative inline-block text-left group">
+                        <button class="text-gray-700 hover:text-indigo-600">
+                            {{ Auth::user()->username ?? Auth::user()->name }} <i class="fas fa-chevron-down text-xs ml-1"></i>
+                        </button>
+                        <div class="hidden group-hover:block absolute z-10 mt-0 w-48 rounded-md shadow-lg bg-white right-0">
+                            <div class="py-1">
+                                @if(Auth::user()->isAdmin())
+                                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100">
+                                        Administration
+                                    </a>
+                                @endif
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-indigo-100">
+                                        Déconnexion
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                @endguest
             </div>
         </nav>
     </header>
