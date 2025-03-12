@@ -57,6 +57,11 @@
                class="inline-block px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
                 Voir toutes les recettes
             </a>
+
+            <a href="{{ route('recettes.create') }}" 
+               class="inline-block px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
+                Ajouter une recette
+            </a>
         </div>
     </div>
 @endsection

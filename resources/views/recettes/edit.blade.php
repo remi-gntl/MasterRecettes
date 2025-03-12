@@ -139,15 +139,14 @@
             
             <div class="mb-6">
                 <label for="image" class="block text-gray-700 font-medium mb-2">Image</label>
-                @if($recette->image)
-                    <div class="mb-2">
-                        <img src="{{ asset('storage/' . $recette->image) }}" alt="{{ $recette->titre }}" class="w-32 h-32 object-cover rounded">
-                    </div>
-                @endif
-                <input type="file" name="image" id="image" 
-                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                       accept="image/*">
-                <p class="text-sm text-gray-500 mt-1">Laissez vide pour conserver l'image actuelle</p>
+                <input type="file" name="image" id="image" class="hidden" accept="image/*" onchange="updateFileName(this)">
+                
+                <label for="image" class="px-4 py-2 bg-indigo-600 text-white rounded-md cursor-pointer hover:bg-indigo-700 inline-block">
+                    Choisir une image
+                </label>
+                
+                <span id="file-name" class="ml-2 text-gray-600"></span>
+            
                 @error('image')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
@@ -164,4 +163,12 @@
             </div>
         </form>
     </div>
+
+    <script>
+        function updateFileName(input) {
+            const fileName = input.files.length > 0 ? input.files[0].name : "Aucun fichier sélectionné";
+            document.getElementById("file-name").textContent = fileName;
+        }
+        </script>
+
 @endsection

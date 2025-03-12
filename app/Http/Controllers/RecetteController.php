@@ -22,23 +22,25 @@ class RecetteController extends Controller
         return view('recettes.create', compact('categories'));
     }
 
-    //fonction de recherche (searchbar dans navbar) (recherche traditionnelle qui recharge toute la page)
-    public function search(Request $request)
-    {
-        $query = $request->input('search');
+    // //fonction de recherche (searchbar dans navbar) (recherche traditionnelle qui recharge toute la page)
+    // public function search(Request $request)
+    // {
+    //     $query = $request->input('search');
 
-        // Si la recherche est vide, redirigez vers la liste des recettes
-        if (empty($query)) {
-            return back();
-        }
+    //     // Si la recherche est vide, redirigez vers la liste des recettes
+    //     if (empty($query)) {
+    //         return back();
+    //     }
 
-        $recettes = Recette::where('titre', 'ILIKE', "%{$query}%")
-            ->orWhere('description', 'ILIKE', "%{$query}%")
-            ->with('categorie')
-            ->paginate(12);
+    //     $recettes = Recette::where('titre', 'ILIKE', "%{$query}%")
+    //         ->orWhere('description', 'ILIKE', "%{$query}%")
+    //         ->with('categorie')
+    //         ->paginate(12);
 
-        return view('recettes.index', compact('recettes', 'search'));
-    }
+    //     return view('recettes.index', compact('recettes', 'search'));
+    // }
+//a mettre si on fait une recherche qui redirige sur une page et pas dynamique
+
 
     //Une recherche AJAX qui renvoie seulement des données JSON
     public function apiSearch(Request $request)
