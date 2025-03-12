@@ -22,6 +22,42 @@ class RecetteController extends Controller
         return view('recettes.create', compact('categories'));
     }
 
+    //fonction de recherche (searchbar dans navbar) (recherche traditionnelle qui recharge toute la page)
+    public function search(Request $request)
+    {
+        $query = $request->input('search');
+
+        // Si la recherche est vide, redirigez vers la liste des recettes
+        if (empty($query)) {
+            return back();
+        }
+
+        $recettes = Recette::where('titre', 'ILIKE', "%{$query}%")
+            ->orWhere('description', 'ILIKE', "%{$query}%")
+            ->with('categorie')
+            ->paginate(12);
+
+        return view('recettes.index', compact('recettes', 'search'));
+    }
+
+    //Une recherche AJAX qui renvoie seulement des données JSON
+    public function apiSearch(Request $request)
+    {
+        $query = $request->input('query');
+
+        if (empty($query) || strlen($query) < 2) {
+            return response()->json([]);
+        }
+
+        $recettes = Recette::where('titre', 'ILIKE', "%{$query}%")
+            ->orWhere('description', 'ILIKE', "%{$query}%")
+            ->with('categorie')
+            ->limit(6)
+            ->get();
+
+        return response()->json($recettes);
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([

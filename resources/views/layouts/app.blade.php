@@ -11,8 +11,17 @@
     <header class="bg-white shadow sticky top-0 z-50">
         <nav class="container mx-auto px-4 py-4 flex items-center justify-between">
             <a href="{{ route('home') }}" class="text-xl font-bold text-indigo-600">Master Recettes</a>
-            
+
             <div class="space-x-4">
+                <div class="relative inline-block">
+                    <div class="relative">
+                        <input type="text" id="search-input" name="query" placeholder="Rechercher une recette..." 
+                               class="px-3 py-1 pr-8 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+                        <i class="fas fa-search absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500"></i>
+                    </div>
+                    <div id="search-results" class="absolute z-10 mt-1 w-64 bg-white shadow-lg rounded-md hidden"></div>
+                </div>
+
                 <a href="{{ route('home') }}" class="text-gray-700 hover:text-indigo-600">Accueil</a>
                 <div class="relative inline-block text-left group">
                     <button class="text-gray-700 hover:text-indigo-600">
@@ -56,5 +65,78 @@
             <p class="text-center">&copy; {{ date('Y') }} Master Recettes - By Rémi GENTIL</p>
         </div>
     </footer>
+
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('search-input');
+    const searchResults = document.getElementById('search-results');
+    
+    searchInput.addEventListener('input', function() {
+        const query = this.value.trim();
+        
+        if (query.length < 2) {
+            searchResults.innerHTML = '';
+            searchResults.classList.add('hidden');
+            return;
+        }
+        
+        // Faire une requête AJAX pour chercher les recettes
+        fetch(`/api/search?query=${encodeURIComponent(query)}`)
+            .then(response => response.json())
+            .then(data => {
+                searchResults.innerHTML = '';
+                searchResults.classList.remove('hidden');
+                
+                if (data.length === 0) {
+                    searchResults.innerHTML = '<div class="p-3 text-gray-500">Aucun résultat trouvé</div>';
+                    return;
+                }
+                
+                data.forEach(recette => {
+                    const resultItem = document.createElement('a');
+                    resultItem.href = `/recettes/${recette.slug}`;
+                    resultItem.className = 'block p-3 hover:bg-gray-100 border-b last:border-b-0';
+                    
+                    let imageHtml = '';
+                    if (recette.image) {
+                        imageHtml = `<img src="/storage/${recette.image}" alt="${recette.titre}" class="w-10 h-10 object-cover rounded mr-2">`;
+                    }
+                    
+                    resultItem.innerHTML = `
+                        <div class="flex items-center">
+                            ${imageHtml}
+                            <div>
+                                <div class="font-medium">${recette.titre}</div>
+                                <div class="text-xs text-gray-500">${recette.categorie.nom}</div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    searchResults.appendChild(resultItem);
+                });
+                
+                // Ajouter un lien "Voir tous les résultats" si nécessaire
+                if (data.length > 5) {
+                    const viewAllLink = document.createElement('a');
+                    viewAllLink.href = `/recettes/search?query=${encodeURIComponent(query)}`;
+                    viewAllLink.className = 'block p-3 text-center text-indigo-600 hover:bg-gray-100 font-medium';
+                    viewAllLink.textContent = 'Voir tous les résultats';
+                    searchResults.appendChild(viewAllLink);
+                }
+            });
+    });
+    
+    // Cacher les résultats quand on clique en dehors
+    document.addEventListener('click', function(event) {
+        if (!searchInput.contains(event.target) && !searchResults.contains(event.target)) {
+            searchResults.classList.add('hidden');
+        }
+    });
+});
+</script>
+@endpush
+@stack('scripts')
 </body>
 </html>
