@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Recette;
 use App\Models\Categorie;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -15,7 +16,7 @@ class RecetteController extends Controller
     private function authorize(Recette $recette)
     {
         // Si l'utilisateur est admin, il peut tout faire
-        if (Auth::user()->isAdmin()) {
+        if (Auth::user()->Auth::isAdmin()) {
             return true;
         }
         
