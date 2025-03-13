@@ -7,7 +7,8 @@ use App\Http\Controllers\{
     CategorieController,
     RecetteController,
     AuthController,
-    ProfileController
+    ProfileController,
+    AdminController
 };
 
 // Route d'accueil
@@ -49,7 +50,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile/delete', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Routes pour l'admin
-Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
-    //routes pour admin
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', [AdminController::class, 'index'])->name('dashboard');
+    Route::get('/users', [AdminController::class, 'users'])->name('users.index');
+    Route::put('/users/{user}/toggle-admin', [AdminController::class, 'toggleAdmin'])->name('users.toggle-admin');
+    Route::delete('/users/{user}', [AdminController::class, 'destroyUser'])->name('users.destroy');
 });

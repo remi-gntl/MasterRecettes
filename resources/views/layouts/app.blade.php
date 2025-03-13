@@ -54,7 +54,7 @@
                         <div class="hidden group-hover:block absolute z-10 mt-0 w-48 rounded-md shadow-lg bg-white right-0">
                             <div class="py-1">
                                 @if(Auth::user()->isAdmin())
-                                    <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100">
+                                    <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 text-gray-700 hover:bg-indigo-100">
                                         Administration
                                     </a>
                                 @endif
