@@ -34,6 +34,11 @@ class Recette extends Model
         return $this->belongsTo(Categorie::class);
     }
 
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
     public function getTempsPreparationHeuresAttribute()
     {
         return floor($this->temps_preparation / 60);
