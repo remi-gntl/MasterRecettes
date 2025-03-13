@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <title>@yield('title', 'Répertoire de Recettes')</title>
     @vite('resources/css/app.css')
@@ -57,6 +58,11 @@
                                         Administration
                                     </a>
                                 @endif
+
+                                @auth
+                                    <a href="{{ route('profile.index') }}" class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-indigo-100">Mon profil</a>
+                                @endauth
+
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
                                     <button type="submit" class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-indigo-100">

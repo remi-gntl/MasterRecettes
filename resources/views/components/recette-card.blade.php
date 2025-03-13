@@ -21,6 +21,11 @@
         <h3 class="text-xl font-semibold mb-2">{{ $recette->titre }}</h3>
         <p class="text-gray-600 mb-2">{{ Str::limit($recette->description, 80) }}</p>
         
+        <p class="text-sm text-gray-500 mb-2">
+            <i class="fa-solid fa-user mr-1"></i>
+            Par {{ $recette->user ? $recette->user->name : 'Inconnu' }}
+        </p>
+
         <div class="card-hover-info">
             @if($recette->temps_preparation || $recette->temps_cuisson)
                 <div class="flex flex-wrap gap-2 text-sm text-gray-500">

@@ -6,7 +6,8 @@ use Illuminate\Support\Facades\App;
 use App\Http\Controllers\{
     CategorieController,
     RecetteController,
-    AuthController
+    AuthController,
+    ProfileController
 };
 
 
@@ -37,6 +38,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/recettes/{recette}/edit', [RecetteController::class, 'edit'])->name('recettes.edit');
     Route::put('/recettes/{recette}', [RecetteController::class, 'update'])->name('recettes.update');
     Route::delete('/recettes/{recette}', [RecetteController::class, 'destroy'])->name('recettes.destroy');
+
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
+    Route::delete('/profile/delete', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 

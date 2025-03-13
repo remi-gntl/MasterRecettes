@@ -77,7 +77,7 @@ class AuthController extends Controller
         }
 
         return back()->withErrors([
-            'email' => 'Les identifiants fournis ne correspondent pas à nos enregistrements.',
+            'email' => 'Le mail saisit est inconnu',
         ])->withInput($request->except('password'));
     }
 

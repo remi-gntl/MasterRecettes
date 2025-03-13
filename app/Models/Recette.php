@@ -21,6 +21,7 @@ class Recette extends Model
         'difficulte',
         'image',
         'categorie_id',
+        'user_id'
     ];
 
 

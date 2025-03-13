@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Recette;
 use App\Models\Categorie;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -12,17 +11,19 @@ use Illuminate\Support\Facades\Auth;
 
 class RecetteController extends Controller
 {
-    // Méthode pour vérifier si l'utilisateur est autorisé à modifier/supprimer une recette
+
     private function authorize(Recette $recette)
     {
-        // Si l'utilisateur est admin, il peut tout faire
-        if (Auth::user()->Auth::isAdmin()) {
+        $user = Auth::user();
+
+        // Vérifier si l'utilisateur est admin
+        if ($user && $user->role === 'admin') {
             return true;
         }
         
-        // Si la recette n'a pas d'utilisateur associé (anciennes recettes)
-        // ou si l'utilisateur connecté est le propriétaire
-        return !$recette->user_id || $recette->user_id === Auth::id();
+        // Uniquement autoriser si l'utilisateur est le propriétaire
+        // et que la recette a un propriétaire
+        return $recette->user_id && $recette->user_id === Auth::id();
     }
 
     public function index()
@@ -92,7 +93,7 @@ class RecetteController extends Controller
 
 
         $validated['slug'] = Str::slug($validated['titre']);
-        
+
         // Associer l'utilisateur connecté
         $validated['user_id'] = Auth::id();
 
@@ -120,7 +121,7 @@ class RecetteController extends Controller
             return redirect()->route('recettes.show', $recette)
                 ->with('error', 'Vous n\'êtes pas autorisé à modifier cette recette.');
         }
-        
+
         $categories = Categorie::all();
         return view('recettes.edit', compact('recette', 'categories'));
     }
@@ -132,7 +133,7 @@ class RecetteController extends Controller
             return redirect()->route('recettes.show', $recette)
                 ->with('error', 'Vous n\'êtes pas autorisé à modifier cette recette.');
         }
-        
+
         $validated = $request->validate([
             'titre' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -199,7 +200,7 @@ class RecetteController extends Controller
         }
 
         $recette->delete();
-        
+
         return redirect()->route('recettes.index')
             ->with('success', 'Recette supprimée avec succès');
     }
