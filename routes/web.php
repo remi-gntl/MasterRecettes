@@ -2,13 +2,18 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Str;
+use App\Notifications\VerifyEmail;
+use Illuminate\Http\Request;
+
 
 use App\Http\Controllers\{
     CategorieController,
     RecetteController,
     AuthController,
     ProfileController,
-    AdminController
+    AdminController,
+    VerificationController
 };
 
 // Route d'accueil
@@ -20,6 +25,8 @@ Route::get('/categories/{categorie:slug}', [CategorieController::class, 'show'])
 
 // Routes pour les recettes - liste générale
 Route::get('/recettes', [RecetteController::class, 'index'])->name('recettes.index');
+
+Route::get('/verify-email/{id}/{token}', [VerificationController::class, 'verify'])->name('verification.verify');
 
 // Routes pour les utilisateurs non connectés
 Route::middleware('guest')->group(function () {
@@ -34,9 +41,32 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     
-    // Routes pour création de recettes (doit être AVANT la route show)
+    // Page d'attente pour la vérification d'email
+    Route::get('/email/verify', function () {
+        return view('auth.verify');
+    })->name('verification.notice');
+    
+    // Route pour renvoyer un email de vérification
+    Route::post('/email/resend', function (Request $request) {
+        $request->user()->verification_token = Str::random(60);
+        $request->user()->save();
+        $request->user()->notify(new VerifyEmail());
+        
+        return back()->with('resent', true);
+    })->name('verification.resend');
+});
+
+
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    // Routes pour création de recettes
     Route::get('/recettes/create', [RecetteController::class, 'create'])->name('recettes.create');
     Route::post('/recettes', [RecetteController::class, 'store'])->name('recettes.store');
+    
+    // Routes pour modification/suppression de recettes
+    Route::get('/recettes/{recette}/edit', [RecetteController::class, 'edit'])->name('recettes.edit');
+    Route::put('/recettes/{recette}', [RecetteController::class, 'update'])->name('recettes.update');
+    Route::delete('/recettes/{recette}', [RecetteController::class, 'destroy'])->name('recettes.destroy');
 
     // Routes pour le profil
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
@@ -48,13 +78,6 @@ Route::middleware('auth')->group(function () {
 
 // Route pour afficher une recette spécifique (doit être APRÈS /recettes/create)
 Route::get('/recettes/{recette}', [RecetteController::class, 'show'])->name('recettes.show');
-
-// Routes pour modification/suppression de recettes (doivent être APRÈS la route show)
-Route::middleware('auth')->group(function () {
-    Route::get('/recettes/{recette}/edit', [RecetteController::class, 'edit'])->name('recettes.edit');
-    Route::put('/recettes/{recette}', [RecetteController::class, 'update'])->name('recettes.update');
-    Route::delete('/recettes/{recette}', [RecetteController::class, 'destroy'])->name('recettes.destroy');
-});
 
 // Routes pour l'administration
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {

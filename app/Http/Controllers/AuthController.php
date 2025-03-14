@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Notifications\VerifyEmail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -36,11 +38,14 @@ class AuthController extends Controller
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'role' => 'user',
+            'verification_token' => Str::random(60),
         ]);
+
+        $user->notify(new VerifyEmail());
 
         Auth::login($user);
 
-        return redirect()->route('home')->with('success', 'Inscription réussie !');
+        return redirect()->route('home')->with('success', 'Compte créé avec succès. Veuillez vérifier votre email.');
     }
 
     /**

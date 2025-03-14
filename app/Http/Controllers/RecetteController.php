@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\RecetteAjoutee;
 
 class RecetteController extends Controller
 {
@@ -20,7 +21,7 @@ class RecetteController extends Controller
         if ($user && $user->role === 'admin') {
             return true;
         }
-        
+
         // Uniquement autoriser si l'utilisateur est le propriétaire
         // et que la recette a un propriétaire
         return $recette->user_id && $recette->user_id === Auth::id();
@@ -103,10 +104,13 @@ class RecetteController extends Controller
             $validated['image'] = $imagePath;
         }
 
-        Recette::create($validated);
+        $recette=Recette::create($validated);
+
+
+        $request->user()->notify(new RecetteAjoutee($recette));
 
         return redirect()->route('recettes.index')
-            ->with('success', 'Recette créée avec succès');
+            ->with('success', 'Recette créée avec succès. Un email de confirmation vous a été envoyé.');
     }
 
     public function show(Recette $recette)

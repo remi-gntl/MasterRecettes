@@ -35,6 +35,7 @@
                                 <th class="pb-2">Nom</th>
                                 <th class="pb-2">Email</th>
                                 <th class="pb-2">Date d'inscription</th>
+                                <th class="pb-2">Compte Verifié</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -43,6 +44,7 @@
                                     <td class="py-2">{{ $user->name }}</td>
                                     <td class="py-2">{{ $user->email }}</td>
                                     <td class="py-2">{{ $user->created_at->format('d/m/Y') }}</td>
+                                    <td class="py-2">{{$user->email_verified ? 'Oui' : 'Non'}}</td>
                                 </tr>
                             @endforeach
                         </tbody>
