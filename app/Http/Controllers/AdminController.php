@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Recette;
 use App\Models\Categorie;
+use Illuminate\Support\Facades\Storage;
 use GrahamCampbell\ResultType\Success;
 use App\Http\Controllers\Auth;
 use Illuminate\Http\Request;
@@ -55,5 +56,25 @@ class AdminController extends Controller
         $user->delete();
 
         return redirect()->route('admin.users.index')->with('success', "L'utilisateur {$user->name} à été supprimé.");
+    }
+
+    public function recettes()
+    {
+        $recettes = Recette::with(['categorie','user'])
+                    ->orderBy('created_at', 'desc')
+                    ->paginate(10);
+        
+        return view('admin.recettes', compact('recettes'));
+    }
+
+    public function destroyRecette(Recette $recette){
+        if ($recette->image && Storage::disk('public')->exists($recette->image)) {
+            Storage::disk('public')->delete($recette->image);
+        }
+        
+        $recette->delete();
+        
+        return redirect()->route('admin.recettes.index')
+            ->with('success', 'La recette a été supprimée avec succès.');
     }
 }

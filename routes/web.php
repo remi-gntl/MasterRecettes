@@ -82,7 +82,11 @@ Route::get('/recettes/{recette}', [RecetteController::class, 'show'])->name('rec
 // Routes pour l'administration
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('dashboard');
+    
     Route::get('/users', [AdminController::class, 'users'])->name('users.index');
     Route::put('/users/{user}/toggle-admin', [AdminController::class, 'toggleAdmin'])->name('users.toggle-admin');
     Route::delete('/users/{user}', [AdminController::class, 'destroyUser'])->name('users.destroy');
+    
+    Route::get('/recettes', [AdminController::class, 'recettes'])->name('recettes.index');
+    Route::delete('/recettes/{recette}', [AdminController::class, 'destroyRecette'])->name('recettes.destroy');
 });

@@ -16,7 +16,7 @@
             <div class="bg-white p-4 rounded-lg shadow">
                 <h2 class="text-lg font-semibold text-indigo-600">Recettes</h2>
                 <p class="text-3xl font-bold">{{ $stats['recettes_count'] }}</p>
-                <a href="" class="text-sm text-indigo-600 hover:underline"></a>
+                <a href="{{route ('admin.recettes.index')}}" class="text-sm text-indigo-600 hover:underline">Gérer les recettes</a>
             </div>
             
             <div class="bg-white p-4 rounded-lg shadow">
