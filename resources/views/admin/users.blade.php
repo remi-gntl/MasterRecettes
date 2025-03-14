@@ -16,6 +16,7 @@
                         <th class="px-4 py-3 text-sm font-medium text-gray-500">ID</th>
                         <th class="px-4 py-3 text-sm font-medium text-gray-500">Nom</th>
                         <th class="px-4 py-3 text-sm font-medium text-gray-500">Email</th>
+                        <th class="px-4 py-3 text-sm font-medium text-gray-500">Compte vérifié</th>
                         <th class="px-4 py-3 text-sm font-medium text-gray-500">Rôle</th>
                         <th class="px-4 py-3 text-sm font-medium text-gray-500">Date d'inscription</th>
                         <th class="px-4 py-3 text-sm font-medium text-gray-500">Actions</th>
@@ -27,6 +28,7 @@
                             <td class="px-4 py-3">{{ $user->id }}</td>
                             <td class="px-4 py-3">{{ $user->name }}</td>
                             <td class="px-4 py-3">{{ $user->email }}</td>
+                            <td class="py-2">{{$user->email_verified ? 'Oui' : 'Non'}}</td>
                             <td class="px-4 py-3">
                                 @if($user->isAdmin())
                                     <span class="px-2 py-1 bg-indigo-100 text-indigo-800 rounded-full text-xs">Admin</span>
