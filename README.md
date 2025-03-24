@@ -17,7 +17,7 @@ Master Recette est une application web développée avec Laravel 12 pour gérer 
 
 ## 🛠️ Technologies utilisées
 
-<div align="center">
+<div align="left">
 
 | Technologies | Utilisation |
 |-------------|-------------|
@@ -36,6 +36,6 @@ Master Recette est une application web développée avec Laravel 12 pour gérer 
 
 ## 📸 Captures d'écran
 
-## 📞 Contact
+## 📝 Auteur
 
 Projet développé par **Rémi GENTIL**.
