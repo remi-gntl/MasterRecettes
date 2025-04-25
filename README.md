@@ -35,6 +35,8 @@ Master Recette est une application web développée avec Laravel 12 pour gérer 
 - [ ] Intégration d'une IA pour la reconnaissance de recettes manuscrites
 
 ## 📸 Captures d'écran
+![image](https://github.com/user-attachments/assets/ed763742-db66-47c0-8bd6-e84a5a27c45b)
+![image](https://github.com/user-attachments/assets/2c6ba40f-5f12-4be0-91b7-d04075a68914)
 
 ## 📝 Auteur
 
